@@ -22,14 +22,7 @@ export default function Contact() {
     <section id="contact" className="section-padding bg-mono-50 dark:bg-mono-900 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-[0.02]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-            backgroundSize: '32px 32px',
-          }}
-        />
+        <div className="absolute inset-0 contact-grid-bg" />
       </div>
 
       {/* Gradient orbs */}
@@ -84,7 +77,7 @@ export default function Contact() {
               <div className="flex-1">
                 <p className="text-xs text-mono-400 dark:text-mono-500 uppercase tracking-wider mb-1">Email</p>
                 <p className="text-sm font-medium text-mono-700 dark:text-mono-300 group-hover:text-mono-900 dark:group-hover:text-mono-50 transition-colors">
-                  muhammednayeem@email.com
+                  muhammednayeem703@email.com
                 </p>
               </div>
               <ArrowRight size={16} className="text-mono-300 dark:text-mono-600 group-hover:text-mono-500 dark:group-hover:text-mono-400 group-hover:translate-x-1 transition-all" />
@@ -92,7 +85,7 @@ export default function Contact() {
 
             {/* Phone */}
             <motion.a
-              href="tel:+919876543210"
+              href="tel:+919844858429"
               whileHover={{ x: 5 }}
               className="group flex items-center gap-4 p-5 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 hover:border-mono-400 dark:hover:border-mono-600 transition-all duration-300 hover:shadow-lg"
             >
@@ -157,10 +150,7 @@ export default function Contact() {
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 rounded-xl pointer-events-none"
-                        style={{
-                          boxShadow: '0 0 0 1px rgba(120, 120, 120, 0.2)',
-                        }}
+                        className="absolute inset-0 rounded-xl pointer-events-none input-focus-ring"
                       />
                     )}
                   </motion.div>

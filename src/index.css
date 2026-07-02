@@ -105,6 +105,25 @@ body {
   .glow-hover:hover {
     box-shadow: 0 0 40px rgba(120, 120, 120, 0.15);
   }
+
+  .contact-grid-bg {
+    background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
+  .input-focus-ring {
+    box-shadow: 0 0 0 1px rgba(120, 120, 120, 0.2);
+  }
+
+  .loader-ring-bg {
+    background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.05), transparent);
+  }
+
+  .loader-orbit-dot {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 @keyframes shimmer {

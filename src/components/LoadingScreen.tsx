@@ -49,10 +49,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
                 repeat: Infinity,
                 ease: 'linear',
               }}
-              className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-conic-gradient opacity-20"
-              style={{
-                background: 'conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.05), transparent)',
-              }}
+              className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-conic-gradient opacity-20 loader-ring-bg"
             />
           </div>
 
@@ -128,12 +125,7 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
                   }}
                   className="absolute inset-0"
                 >
-                  <div
-                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-mono-400"
-                    style={{
-                      transform: `rotate(${i * 90}deg) translateY(-48px)`,
-                    }}
-                  />
+                  <div className="absolute loader-orbit-dot w-2 h-2 rounded-full bg-mono-400" />
                 </motion.div>
               ))}
             </motion.div>
