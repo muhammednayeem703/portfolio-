@@ -64,7 +64,7 @@ export default function Contact() {
           >
             {/* Email */}
             <motion.a
-              href="mailto:muhammednayeem@email.com"
+              href="mailto:muhammednayeem703@gmail.com"
               whileHover={{ x: 5 }}
               className="group flex items-center gap-4 p-5 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 hover:border-mono-400 dark:hover:border-mono-600 transition-all duration-300 hover:shadow-lg"
             >
@@ -77,7 +77,7 @@ export default function Contact() {
               <div className="flex-1">
                 <p className="text-xs text-mono-400 dark:text-mono-500 uppercase tracking-wider mb-1">Email</p>
                 <p className="text-sm font-medium text-mono-700 dark:text-mono-300 group-hover:text-mono-900 dark:group-hover:text-mono-50 transition-colors">
-                  muhammednayeem703@email.com
+                  muhammednayeem703@gmail.com
                 </p>
               </div>
               <ArrowRight size={16} className="text-mono-300 dark:text-mono-600 group-hover:text-mono-500 dark:group-hover:text-mono-400 group-hover:translate-x-1 transition-all" />
@@ -98,7 +98,7 @@ export default function Contact() {
               <div className="flex-1">
                 <p className="text-xs text-mono-400 dark:text-mono-500 uppercase tracking-wider mb-1">Phone</p>
                 <p className="text-sm font-medium text-mono-700 dark:text-mono-300 group-hover:text-mono-900 dark:group-hover:text-mono-50 transition-colors">
-                  +91 98765 43210
+                  +91 98448 58429
                 </p>
               </div>
               <ArrowRight size={16} className="text-mono-300 dark:text-mono-600 group-hover:text-mono-500 dark:group-hover:text-mono-400 group-hover:translate-x-1 transition-all" />
