@@ -111,6 +111,11 @@ body {
     background-size: 32px 32px;
   }
 
+  .hero-grid-bg {
+    background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
   .input-focus-ring {
     box-shadow: 0 0 0 1px rgba(120, 120, 120, 0.2);
   }

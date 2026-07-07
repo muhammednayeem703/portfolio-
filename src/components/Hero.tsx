@@ -39,14 +39,7 @@ export default function Hero() {
 
       {/* Dot grid background */}
       <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-            backgroundSize: '40px 40px',
-          }}
-        />
+        <div className="absolute inset-0 hero-grid-bg" />
       </div>
 
       {/* Animated lines */}
