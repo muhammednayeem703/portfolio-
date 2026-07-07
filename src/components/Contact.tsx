@@ -1,21 +1,56 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Mail, Phone, Send, CheckCircle, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, Phone, Send, CheckCircle, MapPin, ArrowRight, AlertCircle } from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_URL}/api/contact/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+
+      setSubmitted(true);
       setForm({ name: '', email: '', message: '' });
-    }, 3000);
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 5000);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred. Please try again.';
+      setError(errorMessage);
+      console.error('Contact form error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -123,13 +158,24 @@ export default function Contact() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 flex items-start gap-3"
+                >
+                  <AlertCircle size={18} className="text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                </motion.div>
+              )}
+
               {['name', 'email'].map((field) => (
                 <div key={field}>
                   <label
                     htmlFor={field}
                     className="block text-xs font-semibold text-mono-500 dark:text-mono-400 mb-2 uppercase tracking-wider"
                   >
-                    {field}
+                    {field} {field !== 'phone' && <span className="text-red-500">*</span>}
                   </label>
                   <motion.div
                     className="relative"
@@ -138,12 +184,13 @@ export default function Contact() {
                     <input
                       id={field}
                       type={field === 'email' ? 'email' : 'text'}
-                      required
+                      required={field !== 'phone'}
                       value={form[field as keyof typeof form]}
                       onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
                       onFocus={() => setFocused(field)}
                       onBlur={() => setFocused(null)}
-                      className="w-full px-5 py-4 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 text-mono-900 dark:text-mono-100 text-sm focus:outline-none focus:ring-2 focus:ring-mono-400/50 dark:focus:ring-mono-600/50 focus:border-mono-400 dark:focus:border-mono-600 transition-all placeholder:text-mono-300 dark:placeholder:text-mono-600"
+                      disabled={loading}
+                      className="w-full px-5 py-4 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 text-mono-900 dark:text-mono-100 text-sm focus:outline-none focus:ring-2 focus:ring-mono-400/50 dark:focus:ring-mono-600/50 focus:border-mono-400 dark:focus:border-mono-600 transition-all placeholder:text-mono-300 dark:placeholder:text-mono-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder={field === 'email' ? 'your@email.com' : 'Your name'}
                     />
                     {focused === field && (
@@ -162,7 +209,7 @@ export default function Contact() {
                   htmlFor="message"
                   className="block text-xs font-semibold text-mono-500 dark:text-mono-400 mb-2 uppercase tracking-wider"
                 >
-                  Message
+                  Message <span className="text-red-500">*</span>
                 </label>
                 <motion.div
                   className="relative"
@@ -176,7 +223,8 @@ export default function Contact() {
                     onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
                     onFocus={() => setFocused('message')}
                     onBlur={() => setFocused(null)}
-                    className="w-full px-5 py-4 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 text-mono-900 dark:text-mono-100 text-sm focus:outline-none focus:ring-2 focus:ring-mono-400/50 dark:focus:ring-mono-600/50 focus:border-mono-400 dark:focus:border-mono-600 transition-all resize-none placeholder:text-mono-300 dark:placeholder:text-mono-600"
+                    disabled={loading}
+                    className="w-full px-5 py-4 rounded-xl bg-white dark:bg-mono-950 border border-mono-200 dark:border-mono-800 text-mono-900 dark:text-mono-100 text-sm focus:outline-none focus:ring-2 focus:ring-mono-400/50 dark:focus:ring-mono-600/50 focus:border-mono-400 dark:focus:border-mono-600 transition-all resize-none placeholder:text-mono-300 dark:placeholder:text-mono-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Your message..."
                   />
                 </motion.div>
@@ -184,13 +232,24 @@ export default function Contact() {
 
               <motion.button
                 type="submit"
-                disabled={submitted}
-                whileHover={{ scale: submitted ? 1 : 1.02 }}
-                whileTap={{ scale: submitted ? 1 : 0.98 }}
+                disabled={submitted || loading}
+                whileHover={{ scale: submitted || loading ? 1 : 1.02 }}
+                whileTap={{ scale: submitted || loading ? 1 : 0.98 }}
                 className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-mono-900 dark:bg-mono-50 text-white dark:text-mono-900 text-sm font-semibold rounded-xl overflow-hidden disabled:opacity-60 transition-all"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-mono-800 to-mono-700 dark:from-mono-100 dark:to-mono-200 opacity-0 group-hover:opacity-100 transition-opacity" />
-                {submitted ? (
+                {loading ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="relative z-10"
+                    >
+                      <Send size={18} />
+                    </motion.div>
+                    <span>Sending...</span>
+                  </>
+                ) : submitted ? (
                   <>
                     <motion.div
                       initial={{ scale: 0 }}
@@ -208,7 +267,7 @@ export default function Contact() {
                   </>
                 ) : (
                   <>
-                    <Send size={18} className="group-hover:translate-x-0.5 transition-transform" />
+                    <Send size={18} className="group-hover:translate-x-0.5 transition-transform relative z-10" />
                     <span>Send Message</span>
                   </>
                 )}

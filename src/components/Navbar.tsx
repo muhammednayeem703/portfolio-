@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, Download } from 'lucide-react';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -105,6 +105,18 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
             </motion.button>
           ))}
 
+          {/* Download Resume Button */}
+          <a href="/resume.pdf" download target="_blank" rel="noopener noreferrer">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="ml-2 px-4 py-2 rounded-lg text-sm font-medium bg-mono-900 dark:bg-mono-50 text-white dark:text-mono-900 hover:bg-mono-800 dark:hover:bg-mono-200 transition-colors flex items-center gap-2"
+            >
+              <Download size={16} />
+              Resume
+            </motion.button>
+          </a>
+
           {/* Theme toggle */}
           <div className="w-px h-5 bg-mono-200 dark:bg-mono-800 mx-2" />
           <motion.button
@@ -198,6 +210,19 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                   {link.label}
                 </motion.button>
               ))}
+              
+              {/* Mobile Download Resume Button */}
+              <a href="/resume.pdf" download target="_blank" rel="noopener noreferrer" className="w-full">
+                <motion.button
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.05 }}
+                  className="w-full py-3 px-4 rounded-lg text-sm font-medium text-left bg-mono-900 dark:bg-mono-50 text-white dark:text-mono-900 hover:bg-mono-800 dark:hover:bg-mono-200 transition-colors flex items-center gap-2 mt-2"
+                >
+                  <Download size={16} />
+                  Download Resume
+                </motion.button>
+              </a>
             </div>
           </motion.div>
         )}

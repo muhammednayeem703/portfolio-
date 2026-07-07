@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowDown, Mail, FolderOpen, Briefcase } from 'lucide-react';
+import { ArrowDown, Mail, FolderOpen, Briefcase, Download } from 'lucide-react';
 
 export default function Hero() {
   const scrollTo = (id: string) => {
@@ -172,6 +172,23 @@ export default function Hero() {
             <Briefcase size={16} className="relative z-10" />
             <span className="relative z-10">Experience</span>
           </motion.button>
+
+          <a
+            href="/resume.pdf"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative inline-flex items-center gap-2 px-7 py-3 border border-mono-300 dark:border-mono-700 text-mono-700 dark:text-mono-300 text-sm font-medium rounded-full overflow-hidden gradient-border"
+            >
+              <span className="absolute inset-0 bg-mono-50 dark:bg-mono-900 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Download size={16} className="relative z-10" />
+              <span className="relative z-10">Download CV</span>
+            </motion.button>
+          </a>
         </motion.div>
       </div>
 
