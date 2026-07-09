@@ -36,29 +36,64 @@ export default function Contact() {
         return res;
       };
 
+      // Exponential backoff retry helper
+      const retryPost = async (url: string, attempts = 3) => {
+        let lastErr: any = null;
+        for (let i = 0; i < attempts; i++) {
+          try {
+            const r = await doPost(url);
+            return r;
+          } catch (err) {
+            lastErr = err;
+            const delay = Math.pow(2, i) * 300; // 300ms, 600ms, 1200ms
+            // eslint-disable-next-line no-await-in-loop
+            await new Promise((res) => setTimeout(res, delay));
+          }
+        }
+        throw lastErr;
+      };
+
       // Try configured API first, then fallback to same-origin path
       let response = null;
       const primary = `${API_URL.replace(/\/$/, '')}/api/contact/submit`;
       try {
-        response = await doPost(primary);
+        response = await retryPost(primary, 3);
       } catch (errPrimary) {
-        console.warn('Primary contact post failed:', errPrimary);
+        console.warn('Primary contact post failed after retries:', errPrimary);
       }
 
       if (!response || !response.ok) {
-        // fallback: try same-origin relative path (useful when front-end and backend are proxied together)
+        // fallback: try same-origin relative path with retries
         try {
-          response = await doPost('/api/contact/submit');
+          response = await retryPost('/api/contact/submit', 3);
         } catch (errFallback) {
-          console.error('Fallback contact post failed:', errFallback);
+          console.error('Fallback contact post failed after retries:', errFallback);
+          // attempt to log failure to server for debugging, ignore errors
+          try {
+            await fetch('/api/contact/log-failure', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ payload, error: String(errFallback) }),
+            });
+          } catch (logErr) {
+            console.error('Failed to report failure to server:', logErr);
+          }
           throw errFallback;
         }
       }
 
-      const data = await response.json();
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (parseErr) {
+        // response was not JSON (could be HTML error page). fall back to text
+        const text = await response.text().catch(() => null);
+        data = { _rawText: text };
+      }
 
       if (!response.ok) {
-        throw new Error(data?.message || `Failed to send message (status ${response.status})`);
+        const serverMsg = data?.message || data?._rawText || `Failed to send message (status ${response.status})`;
+        throw new Error(serverMsg);
       }
 
       setSubmitted(true);

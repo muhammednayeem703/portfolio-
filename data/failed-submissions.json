@@ -1,0 +1,12 @@
+[
+  {
+    "id": "5dcb0bf3-04f3-44b4-aaea-e615eb0e5d74",
+    "payload": {
+      "email": "fail@test.com",
+      "message": "simulate",
+      "name": "Fail Test"
+    },
+    "error": "simulated error from frontend",
+    "received_at": "2026-07-09T06:01:03.577Z"
+  }
+]

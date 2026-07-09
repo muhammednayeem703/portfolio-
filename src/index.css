@@ -129,6 +129,23 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+  .grid-lines-bg {
+    background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .edu-stripes-bg {
+    background: repeating-linear-gradient(90deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%);
+  }
+
+  .conic-bg {
+    background: conic-gradient(from 0deg, transparent, currentColor 10%, transparent 20%, currentColor 30%, transparent 40%);
+  }
+
+  .conic-bg-rotator {
+    will-change: transform;
+  }
 }
 
 @keyframes shimmer {

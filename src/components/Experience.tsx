@@ -16,13 +16,7 @@ export default function Experience() {
     <section id="experience" className="section-padding bg-white dark:bg-mono-950 relative overflow-hidden">
       {/* Background grid */}
       <div className="absolute inset-0 opacity-[0.02]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
+        <div className="absolute inset-0 grid-lines-bg" />
       </div>
 
       <div ref={ref} className="max-w-6xl mx-auto relative z-10">

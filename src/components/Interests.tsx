@@ -31,13 +31,11 @@ export default function Interests() {
     <section id="interests" className="section-padding bg-white dark:bg-mono-950 relative overflow-hidden">
       {/* Animated background */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.02] dark:opacity-[0.05]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.02] dark:opacity-[0.05] conic-bg-rotator"
         animate={{ rotate: 360 }}
         transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
       >
-        <div className="absolute inset-0" style={{
-          background: 'conic-gradient(from 0deg, transparent, currentColor 10%, transparent 20%, currentColor 30%, transparent 40%)',
-        }} />
+        <div className="absolute inset-0 conic-bg" />
       </motion.div>
 
       <div ref={ref} className="max-w-6xl mx-auto relative z-10">

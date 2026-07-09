@@ -40,9 +40,7 @@ export default function Education() {
     <section id="education" className="section-padding bg-mono-50 dark:bg-mono-900 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-screen opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          background: 'repeating-linear-gradient(90deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%)',
-        }} />
+        <div className="absolute inset-0 edu-stripes-bg" />
       </div>
 
       <div ref={ref} className="max-w-6xl mx-auto relative z-10">

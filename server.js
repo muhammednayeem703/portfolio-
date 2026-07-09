@@ -140,6 +140,24 @@ const saveToFallbackFile = async (submission) => {
   return submission;
 };
 
+const failedLogFile = path.join(dataDir, 'failed-submissions.json');
+
+const saveFailedLog = async (log) => {
+  await fs.mkdir(dataDir, { recursive: true });
+
+  let existing = [];
+  try {
+    const raw = await fs.readFile(failedLogFile, 'utf8');
+    existing = JSON.parse(raw);
+  } catch {
+    existing = [];
+  }
+
+  existing.push(log);
+  await fs.writeFile(failedLogFile, JSON.stringify(existing, null, 2));
+  return log;
+};
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -291,6 +309,25 @@ app.post('/api/contact/submit', async (req, res) => {
       success: false,
       message: 'Unable to store your message right now.',
     });
+  }
+});
+
+// Log failed submissions (from frontend) for debugging
+app.post('/api/contact/log-failure', async (req, res) => {
+  try {
+    const log = {
+      id: crypto ? crypto.randomUUID() : Date.now().toString(),
+      payload: req.body.payload || null,
+      error: req.body.error || null,
+      received_at: new Date().toISOString(),
+    };
+
+    await saveFailedLog(log);
+
+    return res.status(201).json({ success: true, message: 'Logged failure' });
+  } catch (err) {
+    console.error('Failed to save failure log:', err);
+    return res.status(500).json({ success: false, message: 'Unable to log failure' });
   }
 });
 
