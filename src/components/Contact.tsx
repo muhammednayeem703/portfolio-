@@ -19,27 +19,51 @@ export default function Contact() {
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/contact/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          message: form.message
-        }),
-      });
+      // Primary attempt using configured API URL
+      const payload = {
+        name: form.name,
+        email: form.email,
+        message: form.message,
+      };
+
+      const doPost = async (url: string) => {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'cors',
+        });
+        return res;
+      };
+
+      // Try configured API first, then fallback to same-origin path
+      let response = null;
+      const primary = `${API_URL.replace(/\/$/, '')}/api/contact/submit`;
+      try {
+        response = await doPost(primary);
+      } catch (errPrimary) {
+        console.warn('Primary contact post failed:', errPrimary);
+      }
+
+      if (!response || !response.ok) {
+        // fallback: try same-origin relative path (useful when front-end and backend are proxied together)
+        try {
+          response = await doPost('/api/contact/submit');
+        } catch (errFallback) {
+          console.error('Fallback contact post failed:', errFallback);
+          throw errFallback;
+        }
+      }
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to send message');
+        throw new Error(data?.message || `Failed to send message (status ${response.status})`);
       }
 
       setSubmitted(true);
       setForm({ name: '', email: '', message: '' });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitted(false);
