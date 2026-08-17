@@ -14,10 +14,16 @@ import Education from './components/Education';
 import Interests from './components/Interests';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import Admin from './components/Admin';
 
 export default function App() {
   const { isDark, toggle } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
+
+  // Admin dashboard
+  if (window.location.pathname === '/admin') {
+    return <Admin />;
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-mono-950 text-mono-900 dark:text-mono-50 transition-colors duration-300">

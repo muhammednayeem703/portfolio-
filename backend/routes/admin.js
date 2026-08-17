@@ -6,19 +6,55 @@ const router = express.Router();
 
 // Simple auth middleware - in production, use JWT or similar
 const adminAuth = (req, res, next) => {
-  const username = process.env.ADMIN_USERNAME || 'admin';
-  const password = process.env.ADMIN_PASSWORD || 'admin';
-  
-  const auth = req.headers.authorization?.split(' ')[1];
-  if (!auth) {
-    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!username || !password) {
+    console.error('Admin credentials are not configured.');
+    return res.status(500).json({
+      success: false,
+      message: 'Admin authentication is not configured.',
+    });
   }
 
-  const [user, pass] = Buffer.from(auth, 'base64').toString().split(':');
-  if (user === username && pass === password) {
-    next();
-  } else {
-    res.status(401).json({ success: false, message: 'Invalid credentials' });
+  const auth = req.headers.authorization?.split(' ')[1];
+
+  if (!auth) {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized',
+    });
+  }
+
+  try {
+    const decoded = Buffer.from(auth, 'base64')
+      .toString('utf8');
+
+    const separatorIndex = decoded.indexOf(':');
+
+    if (separatorIndex === -1) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid authorization format',
+      });
+    }
+
+    const user = decoded.substring(0, separatorIndex);
+    const pass = decoded.substring(separatorIndex + 1);
+
+    if (user === username && pass === password) {
+      next();
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials',
+      });
+    }
+  } catch {
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid authorization',
+    });
   }
 };
 
